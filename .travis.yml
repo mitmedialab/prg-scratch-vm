@@ -47,7 +47,7 @@ jobs:
           all_branches: true
           condition: $TRAVIS_EVENT_TYPE != cron
         skip_cleanup: true
-        script: npm run deploy -- -x --no-silent
+        script: npm run deploy -- -x
       - provider: script
         on:
           branch: develop
