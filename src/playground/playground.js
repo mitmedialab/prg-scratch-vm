@@ -1,3 +1,11 @@
+const ScratchStorage = require('scratch-storage');
+const VirtualMachine = require('..');
+import ScratchBlocks from 'scratch-blocks';
+import PlaygroundToolbox from './playground-toolbox';
+const ScratchRender = require('scratch-render');
+const AudioEngine = require('scratch-audio');
+const ScratchSVGRenderer = require('scratch-svg-renderer');
+
 const Scratch = window.Scratch = window.Scratch || {};
 
 const ASSET_SERVER = 'https://cdn.assets.scratch.mit.edu/';
@@ -109,7 +117,7 @@ const addProfilerPanels = function (
 window.onload = function () {
     // Lots of global variables to make debugging easier
     // Instantiate the VM.
-    const vm = new window.VirtualMachine();
+    const vm = new VirtualMachine();
     Scratch.vm = vm;
 
     const storage = new ScratchStorage(); /* global ScratchStorage */
@@ -127,14 +135,17 @@ window.onload = function () {
 
     // Instantiate the renderer and connect it to the VM.
     const canvas = document.getElementById('scratch-stage');
-    const renderer = new window.RenderWebGL(canvas);
+    const renderer = new ScratchRender(canvas);
     Scratch.renderer = renderer;
     vm.attachRenderer(renderer);
-    const audioEngine = new window.AudioEngine();
+    const audioEngine = new AudioEngine();
     vm.attachAudioEngine(audioEngine);
+    vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
+    vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
 
     // Instantiate scratch-blocks and attach it to the DOM.
-    const workspace = window.Blockly.inject('blocks', {
+    const workspace = ScratchBlocks.inject('blocks', {
+        toolbox: PlaygroundToolbox,
         media: './media/',
         zoom: {
             controls: true,
@@ -150,7 +161,8 @@ window.onload = function () {
             insertionMarkerOpacity: 0.3,
             fieldShadow: 'rgba(255, 255, 255, 0.3)',
             dragShadowOpacity: 0.6
-        }
+        },
+
     });
     Scratch.workspace = workspace;
 
@@ -162,11 +174,11 @@ window.onload = function () {
     flyoutWorkspace.addChangeListener(vm.monitorBlockListener);
 
     // Create FPS counter.
-    const stats = new window.Stats();
-    document.getElementById('tab-renderexplorer').appendChild(stats.dom);
-    stats.dom.style.position = 'relative';
-    addProfilerPanels(stats, vm, 'BLK%', '#fff', '#111');
-    stats.begin();
+    // const stats = Stats();
+    // document.getElementById('tab-renderexplorer').appendChild(stats.dom);
+    // stats.dom.style.position = 'relative';
+    // addProfilerPanels(stats, vm, 'BLK%', '#fff', '#111');
+    // stats.begin();
 
     // Playground data tabs.
     // Block representation tab.
