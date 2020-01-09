@@ -88,6 +88,7 @@ module.exports = [
         target: 'web',
         entry: {
             'benchmark': './src/playground/benchmark',
+            'playground': './src/playground/playground',
             'video-sensing-extension-debug': './src/extensions/scratch3_video_sensing/debug'
         },
         output: {

@@ -22,8 +22,8 @@ script: npm run $NPM_SCRIPT
 after_script: greenkeeper-lockfile-upload
 jobs:
     include:
-    - env: NPM_SCRIPT=lint
-      node_js: 8
+#    - env: NPM_SCRIPT=lint
+#      node_js: 8
     - env: NPM_SCRIPT=build
       node_js: 8
       if: not (branch in (master, develop) and type != pull_request)
@@ -47,7 +47,7 @@ jobs:
           all_branches: true
           condition: $TRAVIS_EVENT_TYPE != cron
         skip_cleanup: true
-        script: npm run --silent deploy -- -x -r $GH_PAGES_REPO
+        script: npm run deploy -- -x -r https://$GH_TOKEN@$GH_PAGES_REPO
       - provider: script
         on:
           branch: develop
@@ -57,4 +57,4 @@ jobs:
 stages:
 - test
 - name: release
-  if: branch in (master, develop) and type != pull_request
+  if: branch in (master, develop, test-deploy) and type != pull_request

@@ -775,7 +775,7 @@ class Scratch3MusicBlocks {
                         DRUM: {
                             type: ArgumentType.NUMBER,
                             menu: 'DRUM',
-                            defaultValue: 1
+                            defaultValue: 100
                         },
                         BEATS: {
                             type: ArgumentType.NUMBER,
@@ -795,7 +795,7 @@ class Scratch3MusicBlocks {
                         DRUM: {
                             type: ArgumentType.NUMBER,
                             menu: 'DRUM',
-                            defaultValue: 1
+                            defaultValue: 100
                         },
                         BEATS: {
                             type: ArgumentType.NUMBER,
